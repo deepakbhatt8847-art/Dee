@@ -1,0 +1,6 @@
+{
+  "name": "AusPost Round Assistant",
+  "description": "Scan streets on mail and packages to instantly display delivery round numbers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
