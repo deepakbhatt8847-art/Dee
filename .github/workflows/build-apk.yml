@@ -10,43 +10,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_SDK_ROOT: /opt/android-sdk
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up JDK 11
+    - name: Set up JDK 11 (Temurin) and enable Gradle cache
       uses: actions/setup-java@v3
       with:
+        distribution: 'temurin'
         java-version: '11'
-        distribution: 'adopt'
+        cache: 'gradle'
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - name: Install Android SDK command-line tools
+      run: |
+        sudo mkdir -p /opt/android-sdk/cmdline-tools
+        sudo chown $USER /opt/android-sdk
+        curl -sSfL https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline-tools.zip
+        unzip -q cmdline-tools.zip -d /tmp
+        mkdir -p /opt/android-sdk/cmdline-tools/latest
+        mv /tmp/cmdline-tools/* /opt/android-sdk/cmdline-tools/latest/
+        rm cmdline-tools.zip
+      shell: bash
 
-    - name: Build debug APK
-      run: ./gradlew assembleDebug
-
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-debug.apk
-        path: app/build/outputs/apk/debug/app-debug.apk
-
-    - name: Build release APK
-      run: ./gradlew assembleRelease
-      continue-on-error: true
-
-    - name: Upload release APK artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-release.apk
-        path: app/build/outputs/apk/release/app-release.apk
-      continue-on-error: true
-      git clone https://github.com/deepakbhatt8847-art/Dee.git
-cd Dee
-mkdir -p .github/workflows
-# Create build-apk.yml with the workflow content above
-git add .github/workflows/build-apk.yml
-git commit -m "Add GitHub Actions workflow to build APK"
-git push origin main
+    - name: Accept SDK licenses & install build tools and platform
+      run: |
+        yes | /opt/android-sdk/cmdline-tools/latest](#)
+kout
